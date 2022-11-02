@@ -1,0 +1,68 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>add video</title>
+{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container mt-4">
+    <h4 class="d-block"><span class="text-muted">add video to</span> {{ hall.title }}</h4>
+    {% if error %}
+    <div class="alert alert-danger mb-2 mt-2">{{ error }}</div>
+    {% endif %}
+    <form method='POST' id="add_video">
+        {% csrf_token %}
+        {% for field in form %}
+        {{ field.label_tag }}
+        {% render_field field class="form-control mt-2 mb-2" %}
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="Add">
+    </form>
+    <div class="mt-4">
+        <div class="h5 text-primary">Or</div>
+        <label for="id_search_term" class="form-label">Search on Youtube</label>
+        {% render_field search_form.search_term class="form-control" %}
+        <div id="search-result">
+        </div>
+    </div>
+</div>
+<script>
+    function addVideo(videoId) {
+        yt_link = "https://www.youtube.com/watch?v=" + videoId;
+        $("#id_url").val(yt_link)
+        $("#add_video").submit()
+    }
+
+    let delayTimerId;
+    $("#id_search_term").keyup(
+        function(){
+            $("#search-result").empty()
+            let search_term = $("#id_search_term").val()
+            clearTimeout(delayTimerId)
+            delayTimerId = setTimeout(function(){
+                $("#search-result").append('<div class="spinner-border text-info mt-2 mb-2" role="status"><span class="visually-hidden">Loading...</span></div>')
+                $.ajax({
+                    "url":"http://127.0.0.1:8000/search/",
+                    "type":"get",
+                    "data":{
+                        "search_term":search_term,
+                    },
+                    "cache":false,
+                    "dataType":"json",
+                    "success":function(data, status, xhr){
+                        let results = "<div class='row mt-3'>";
+                        data['items'].forEach(function(video){
+                            results += "<div class='col-md-4 mb-3'><div class='card shadow-sm'>";
+                            results += '<iframe width="100%" height="220px" src="https://www.youtube.com/embed/' + video['id']['videoId'] +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                            results += '<div class="card-body"><p class="card-text">' + video['snippet']['title'] + '</p><button class="btn btn-primary" onClick="addVideo(\'' + video['id']['videoId'] + '\')">Add to HOF</button></div>'
+                            results += "</div></div>";
+                        })
+                        results += "</div>"
+                        $("#search-result").empty()
+                        $("#search-result").append(results)
+                    }
+                })
+            },1000)
+        }
+    );
+</script>
+{% endblock  %}

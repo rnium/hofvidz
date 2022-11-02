@@ -1,0 +1,26 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>Login</title>
+{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="d-block h4 text-primary text-center bg-primary bg-opacity-10 py-4">User Login</div>
+<div class="container mt-4">
+    <form method='POST'>
+        {% csrf_token %}
+        <label for="id_username" class="form-label">Username</label>
+        {% render_field form.username class="form-control" %}
+        <label for="id_password" class="form-label">Password</label>
+        {% render_field form.password class="form-control" %}
+        <input type="submit" class="btn btn-primary mt-3" value="Login">
+        <input type="hidden" name="next" value="{% url 'home' %}">
+    </form>
+    {% if form.errors %}
+    <div class="container mt-3 alert alert-danger">
+        {% for erroritems in form.errors %}
+        {% for error in erroritems %}<div>{{ error }}</div>{% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock  %}

@@ -1,0 +1,31 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>signup</title>
+{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container rounded mt-5 border p-0 shadow-sm">
+    <div class="text-center bg-primary bg-opacity-10 py-3 h4 text-primary">Signup User</div>
+    <form method='POST' class="px-5 py-5">
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            {% render_field form.username class="form-control" placeholder="name"%}
+            <label for="id_username">Username</label>
+        </div>
+        <div class="form-floating mb-3">
+            {% render_field form.password1 class="form-control" placeholder="Password" %}
+            <label class="form-label" for="id_password1">Password</label>
+        </div>
+        <div class="form-floating">
+            {% render_field form.password2 class="form-control" placeholder="Retype Password" %}
+            <label class="form-label" for="id_password2">Retype Password</label>
+        </div>
+        <input type="submit" class="btn btn-primary mt-3" value="SignUp">
+    </form>
+    {% if form.errors %}
+    <div class="container mb-0 alert alert-danger">
+        {{ form.errors }}
+    </div>
+    {% endif %}
+</div>
+{% endblock  %}

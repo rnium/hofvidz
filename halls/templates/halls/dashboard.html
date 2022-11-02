@@ -1,0 +1,33 @@
+{% extends 'halls/base.html' %}
+{% block title %}<title>Dashboard</title>{% endblock %}
+{% block content %}
+<div class="title text-center mb-2 py-4 bg-primary bg-opacity-10">
+    <div class="h2">Hall of Fames by {{ request.user.username }}</div>
+    <a href="{% url 'create_hof' %}" class="btn btn-primary">Create New Hall Of Fame</a>
+</div>
+<div class="container">
+    {% for hall in halls %}
+    <div class="hof">
+        <div class="mb-2">
+            <a href="{% url 'detail_hof' hall.id %}" class="h3 d-block text-decoration-none text-success">{{ hall.title }}</a>
+            <a href="{% url 'update_hof' hall.id %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'add_video' hall.id %}" class="btn btn-primary">Add Video</a>
+            <a href="{% url 'delete_hof' hall.id %}" class="btn btn-danger">Delete</a>
+        </div>
+        <div class="row">
+            {% for video in hall.video_set.all %}
+            <div class='col-md-4 mb-3'>
+                <div class='card shadow-sm'>
+                    <iframe width="100%" height="230px" src="https://www.youtube.com/embed/{{ video.youtube_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="card-body">
+                        <p class="card-text">{{ video.title }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>create hof</title>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h4 class="d-block">create new Hall of Fame</h4>
+    <form method='POST'>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Create">
+    </form>
+</div>
+{% endblock  %}

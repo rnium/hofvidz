@@ -1,0 +1,17 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>Update hof</title>
+{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container mt-4">
+    <h4 class="d-block mb-3 text-primary text-center">Edit Hall of Fame</h4>
+    <form method='POST'>
+        {% csrf_token %}
+        <label for="id_title" class="form-label">Hall of Fame title</label>
+        {% render_field form.title class="form-control mb-2" %}
+        <input type="submit" class="btn btn-primary mb-2" value="Edit">
+    </form>
+    <a href="{% url 'delete_hof' hall.id %}" class='btn btn-danger'>Delete</a>
+</div>
+{% endblock  %}

@@ -1,0 +1,14 @@
+{% extends 'halls/base.html' %}
+{% block title %}
+<title>Delete hof</title>
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h4 class="d-block">Delete {{ hall.title }}</h4>
+    <form method='POST'>
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Delete">
+    </form>
+    <a href="{% url 'detail_hof' hall.id %}" class='btn btn-primary'>Cancel</a>
+</div>
+{% endblock  %}
